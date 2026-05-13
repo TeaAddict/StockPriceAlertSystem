@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration
@@ -35,17 +36,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/alerts").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/alerts/*").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/alerts/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/*/sessions").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/*/sessions/*").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/*/sessions").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/sessions/*/registrations").hasAnyRole("USER", "ADMIN")
-                        // TODO - allow user to only get his own registration
-                        .requestMatchers(HttpMethod.GET, "/api/sessions/registrations/*").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/sessions/*/registrations").hasRole("ADMIN")
+
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/me").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/me").hasAnyRole("ADMIN", "USER")
                         .anyRequest().denyAll()
                 ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();

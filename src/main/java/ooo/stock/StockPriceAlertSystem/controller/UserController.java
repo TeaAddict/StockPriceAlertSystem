@@ -1,11 +1,18 @@
 package ooo.stock.StockPriceAlertSystem.controller;
 
+import lombok.AllArgsConstructor;
+import ooo.stock.StockPriceAlertSystem.dto.UserResponse;
+import ooo.stock.StockPriceAlertSystem.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
 @RequestMapping("/api/users")
 @RestController
 public class UserController {
+
+    private final UserService userService;
 
     @PostMapping("/subscribe")
     public ResponseEntity<?> subscribe(){

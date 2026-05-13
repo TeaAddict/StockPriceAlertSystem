@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.UUID;
 
 @Service
 public class JwtService {
@@ -34,14 +33,13 @@ public class JwtService {
                 .compact();
     }
 
-    public UUID extractUserId(String token){
-        String userId = Jwts.parser()
+    public Long extractUserId(String token){
+        return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("userId", String.class);
-        return UUID.fromString(userId);
+                .get("userId", Long.class);
     }
 
     public String extractEmail(String token){
