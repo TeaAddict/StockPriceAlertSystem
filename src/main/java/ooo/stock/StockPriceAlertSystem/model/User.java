@@ -28,4 +28,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Alert> alerts;
+
+
 }

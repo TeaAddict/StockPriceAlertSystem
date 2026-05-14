@@ -1,6 +1,7 @@
 package ooo.stock.StockPriceAlertSystem.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,12 +20,15 @@ public class Alert {
 
     private String label;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PriceCondition priceCondition;
+
+    private BigDecimal targetPrice;
+
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-
-    public Alert(String label){
-        this.label = label;
-    }
 }

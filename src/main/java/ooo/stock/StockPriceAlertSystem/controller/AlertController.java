@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import ooo.stock.StockPriceAlertSystem.dto.AlertMapper;
 import ooo.stock.StockPriceAlertSystem.dto.AlertRequest;
 import ooo.stock.StockPriceAlertSystem.dto.AlertResponse;
-import ooo.stock.StockPriceAlertSystem.model.User;
 import ooo.stock.StockPriceAlertSystem.service.AlertService;
 import ooo.stock.StockPriceAlertSystem.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @AllArgsConstructor
 @RequestMapping("/api")
@@ -20,13 +21,13 @@ public class AlertController {
     private UserService userService;
 
     @GetMapping("/alerts")
-    public ResponseEntity<?> getAlerts(){
-        return ResponseEntity.ok("");
+    public ResponseEntity<List<AlertResponse>> getAlerts(){
+        return ResponseEntity.ok(AlertMapper.toAlertResponses(alertService.getAlerts()));
     }
 
     @GetMapping("/alerts/{id}")
-    public ResponseEntity<?> getAlert(@PathVariable Long id){
-        return ResponseEntity.ok("");
+    public ResponseEntity<AlertResponse> getAlert(@PathVariable Long id){
+        return ResponseEntity.ok(AlertMapper.toAlertResponse(alertService.getAlert(id)));
     }
 
     @PostMapping("/alerts")
@@ -35,13 +36,15 @@ public class AlertController {
     }
 
     @PutMapping("/alerts/{id}")
-    public ResponseEntity<?> updateAlert(@PathVariable Long id){
-        return ResponseEntity.ok("");
+    public ResponseEntity<?> updateAlert(@PathVariable Long id, @Valid @RequestBody AlertRequest alertRequest ){
+        alertService.updateAlert(id, alertRequest);
+        return ResponseEntity.ok(AlertMapper.toAlertResponse(alertService.updateAlert(id, alertRequest)));
     }
 
     @DeleteMapping("/alerts/{id}")
     public ResponseEntity<?> deleteAlert(@PathVariable Long id){
-        return ResponseEntity.ok("");
+        alertService.deleteAlert(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

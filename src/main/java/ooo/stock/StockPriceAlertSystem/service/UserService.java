@@ -1,6 +1,7 @@
 package ooo.stock.StockPriceAlertSystem.service;
 
 import lombok.AllArgsConstructor;
+import ooo.stock.StockPriceAlertSystem.dto.UserRequest;
 import ooo.stock.StockPriceAlertSystem.exception.ResourceAlreadyExistsException;
 import ooo.stock.StockPriceAlertSystem.exception.ResourceNotFoundException;
 import ooo.stock.StockPriceAlertSystem.model.Role;
@@ -8,6 +9,8 @@ import ooo.stock.StockPriceAlertSystem.model.User;
 import ooo.stock.StockPriceAlertSystem.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -19,11 +22,14 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
     }
 
+    public List<User> getUsers(){
+        return userRepository.findAll();
+    }
+
     public void saveUser(User user){
         if(userRepository.existsByEmail(user.getEmail())){
             throw new ResourceAlreadyExistsException("Email already exists");
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
         userRepository.save(user);
@@ -35,5 +41,18 @@ public class UserService {
 
     public User getUserByEmail(String email){
         return userRepository.findUserByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    public User updateUser(Long userId, UserRequest userRequest){
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setUserName(userRequest.userName());
+        user.setEmail(userRequest.email());
+        return user;
+    }
+
+    public void deleteUser(Long userId){
+        userRepository.delete(userRepository
+                .findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found")));
     }
 }
