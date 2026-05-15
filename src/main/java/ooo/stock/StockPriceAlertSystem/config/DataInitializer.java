@@ -24,10 +24,11 @@ public class DataInitializer implements ApplicationRunner {
         }
 
         User admin = new User();
-        admin.setUserName("admin");
+        admin.setUsername("admin");
         admin.setEmail("admin@example.com");
         admin.setPassword(passwordEncoder.encode("admin"));
         admin.setRole(Role.ADMIN);
+        admin.setCreatedBy("SYS");
 
         userRepository.save(admin);
         System.out.println("Default admin user created");

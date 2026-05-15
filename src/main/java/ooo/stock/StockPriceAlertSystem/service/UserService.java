@@ -45,7 +45,7 @@ public class UserService {
 
     public User updateUser(Long userId, UserRequest userRequest){
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        user.setUserName(userRequest.userName());
+        user.setUsername(userRequest.userName());
         user.setEmail(userRequest.email());
         return user;
     }
