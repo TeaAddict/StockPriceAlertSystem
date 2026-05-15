@@ -1,6 +1,6 @@
 package ooo.stock.StockPriceAlertSystem.model;
 
 public enum PriceCondition {
-    ABOVE,
-    BELOW
+    GREATER_THAN,
+    LESS_THAN
 }

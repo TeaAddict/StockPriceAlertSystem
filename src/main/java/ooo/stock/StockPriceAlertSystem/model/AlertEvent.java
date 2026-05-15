@@ -7,28 +7,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class Alert {
+public class AlertEvent extends Auditable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String label;
-
     @NotNull
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PriceCondition priceCondition;
+    private BigDecimal price;
 
-    private BigDecimal targetPrice;
+    private LocalDateTime triggeredAt;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = false)
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "alert_rule_id",nullable = false)
+    private AlertRule alertRule;
 
 }

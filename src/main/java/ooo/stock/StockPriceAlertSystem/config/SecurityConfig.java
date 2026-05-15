@@ -29,8 +29,8 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // TODO - remove later
-                        .requestMatchers("/h2-console/**").permitAll()
+                        // TODO - remove h2 later
+//                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/alerts").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/alerts/*").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/alerts").hasRole("ADMIN")

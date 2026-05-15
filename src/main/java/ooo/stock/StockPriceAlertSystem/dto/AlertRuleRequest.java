@@ -8,10 +8,10 @@ import ooo.stock.StockPriceAlertSystem.model.PriceCondition;
 
 import java.math.BigDecimal;
 
-public record AlertRequest(
-        @NotBlank(message = "Label is required")
-        @Size(min = 2, max = 200, message = "Label size should be 2 - 200 chars")
-        String label,
+public record AlertRuleRequest(
+        @NotBlank(message = "Ticker is required")
+        @Size(min = 2, max = 200, message = "Ticker size should be 2 - 200 chars")
+        String ticker,
 
         @NotNull(message = "Price condition is required")
         PriceCondition priceCondition,

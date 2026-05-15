@@ -1,0 +1,15 @@
+
+Run docker container based on docker-compose.yml -
+docker compose up -d
+
+
+
+
+
+
+
+
+
+
+
+
