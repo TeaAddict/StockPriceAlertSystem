@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ooo.stock.StockPriceAlertSystem.model.AlertEvent;
 import ooo.stock.StockPriceAlertSystem.model.AlertRule;
-import ooo.stock.StockPriceAlertSystem.model.PriceCondition;
 import ooo.stock.StockPriceAlertSystem.model.Status;
 import ooo.stock.StockPriceAlertSystem.repository.AlertEventRepository;
 import ooo.stock.StockPriceAlertSystem.repository.AlertRuleRepository;

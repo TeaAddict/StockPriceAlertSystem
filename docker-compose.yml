@@ -7,8 +7,8 @@ services:
     container_name: stock-postgres
     environment:
       POSTGRES_DB: stocks
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
     ports:
       - "5432:5432"
 
@@ -19,8 +19,8 @@ services:
     ports:
       - "5050:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEF_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEF_PASS}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - ./docker/pgadmin/servers.json:/pgadmin4/servers.json
