@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import ooo.stock.StockPriceAlertSystem.dto.AlertRuleRequest;
 import ooo.stock.StockPriceAlertSystem.exception.ResourceNotFoundException;
 import ooo.stock.StockPriceAlertSystem.model.AlertRule;
+import ooo.stock.StockPriceAlertSystem.model.Status;
 import ooo.stock.StockPriceAlertSystem.model.User;
 import ooo.stock.StockPriceAlertSystem.repository.AlertRuleRepository;
 import ooo.stock.StockPriceAlertSystem.repository.UserRepository;
@@ -25,20 +26,21 @@ public class AlertRuleService {
         alertRule.setTicker(alertRuleRequest.ticker());
         alertRule.setPriceCondition(alertRuleRequest.priceCondition());
         alertRule.setTargetPrice(alertRuleRequest.targetPrice());
+        alertRule.setStatus(Status.ACTIVE);
         alertRule.setUser(user);
         alertRuleRepository.save(alertRule);
         return alertRule;
     }
 
-    public List<AlertRule> getAlerts(){
+    public List<AlertRule> getAlertRules(){
         return alertRuleRepository.findAll();
     }
 
-    public AlertRule getAlert(Long alertId){
+    public AlertRule getAlertRule(Long alertId){
         return alertRuleRepository.findById(alertId).orElseThrow(() -> new ResourceNotFoundException("AlertRule not found"));
     }
 
-    public AlertRule updateAlert(Long alertId, AlertRuleRequest alertRuleRequest){
+    public AlertRule updateAlertRule(Long alertId, AlertRuleRequest alertRuleRequest){
         AlertRule alertRule = alertRuleRepository.findById(alertId).orElseThrow(() -> new ResourceNotFoundException("AlertRule not found"));
         User user = userRepository.findById(alertRuleRequest.userId()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         alertRule.setTicker(alertRuleRequest.ticker());
@@ -49,7 +51,7 @@ public class AlertRuleService {
         return alertRule;
     }
 
-    public void deleteAlert(Long alertId){
+    public void deleteAlertRule(Long alertId){
         AlertRule alertRule = alertRuleRepository.findById(alertId).orElseThrow(() -> new ResourceNotFoundException("AlertRule not found"));
         alertRuleRepository.deleteById(alertId);
     }

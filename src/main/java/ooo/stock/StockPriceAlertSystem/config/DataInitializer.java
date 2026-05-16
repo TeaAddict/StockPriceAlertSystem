@@ -28,7 +28,7 @@ public class DataInitializer implements ApplicationRunner {
         admin.setEmail("admin@admin.com");
         admin.setPassword(passwordEncoder.encode("admin"));
         admin.setRole(Role.ADMIN);
-        admin.setCreatedBy("SYS");
+        admin.setCreatedBy("system");
 
         userRepository.save(admin);
         System.out.println("Default admin user created");

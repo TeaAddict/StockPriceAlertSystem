@@ -3,13 +3,16 @@ package ooo.stock.StockPriceAlertSystem.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ooo.stock.StockPriceAlertSystem.model.AlertEvent;
 import ooo.stock.StockPriceAlertSystem.model.AlertRule;
+import ooo.stock.StockPriceAlertSystem.model.PriceCondition;
 import ooo.stock.StockPriceAlertSystem.model.Status;
 import ooo.stock.StockPriceAlertSystem.repository.AlertEventRepository;
 import ooo.stock.StockPriceAlertSystem.repository.AlertRuleRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,57 +28,44 @@ public class AlertEngineService {
 
     @Transactional
     public void processAlerts(){
-        log.info("Starting alert processing...");
-
         List<AlertRule> activeAlertRules = alertRuleRepository.findByStatus(Status.ACTIVE);
 
-        if (activeAlertRules.isEmpty()){
-            log.info("No active rules found");
-            return;
-        }
+        Map<String, List<AlertRule>> groupedAlertRules = activeAlertRules.stream().collect(Collectors.groupingBy(AlertRule::getTicker));
 
-        Map<String, List<AlertRule>> alertRulesByTicker = activeAlertRules.stream().collect(Collectors.groupingBy(AlertRule::getTicker));
-
-        for (Map.Entry<String, List<AlertRule>> entry : alertRulesByTicker.entrySet()) {
-
+        for (Map.Entry<String, List<AlertRule>> entry : groupedAlertRules.entrySet()){
+            evaluateRules(marketDataService.getCurrentPrice(entry.getKey()), entry.getValue());
         }
     }
 
-    private void evaluateRules(List<AlertRule> alertRules, BigDecimal currentPrice){
+    public void evaluateRules(BigDecimal currentPrice, List<AlertRule> alertRules){
+        for (AlertRule alertRule : alertRules){
+            if (shouldTrigger(currentPrice, alertRule)){
+                triggerAlert(currentPrice, alertRule);
+            }
+        }
     }
 
-    private boolean shouldTrigger(AlertRule alertRule, BigDecimal currentPrice){
-        return true;
+    public boolean shouldTrigger(BigDecimal currentPrice, AlertRule alertRule){
+        return switch (alertRule.getPriceCondition()){
+            case GREATER_THAN -> currentPrice.compareTo(alertRule.getTargetPrice()) > 0;
+            case LESS_THAN -> currentPrice.compareTo(alertRule.getTargetPrice()) < 0;
+        };
     }
 
-    private void triggerAlert(AlertRule alertRule, BigDecimal currentPrice){}
+    public void triggerAlert(BigDecimal currentPrice, AlertRule alertRule){
+        log.info("Alert triggered at price: {},\tTicker: {},\tRule id: {}", currentPrice, alertRule.getTicker(), alertRule.getId());
+
+        alertRule.setStatus(Status.TRIGGERED);
+
+        AlertEvent alertEvent = new AlertEvent();
+        alertEvent.setAlertRule(alertRule);
+        alertEvent.setTriggeredAt(LocalDateTime.now());
+        alertEvent.setPrice(currentPrice);
+        alertEvent.setCreatedBy("system");
+        alertEventRepository.save(alertEvent);
+    }
 
 
 
-//    @Transactional
-//    public void processAlerts(){
-//        log.info("Starting alert processing...");
-//
-//        List<AlertRule> activeAlertRules = alertRuleRepository.findByStatus(Status.ACTIVE);
-//
-//        if (activeAlertRules.isEmpty()){
-//            log.info("No active rules found");
-//        }
-//
-//        Map<String, List<AlertRule>> alertRulesByTicker = activeAlertRules.stream().collect(Collectors.groupingBy(AlertRule::getTicker));
-//
-//        for (Map.Entry<String, List<AlertRule>> entry : alertRulesByTicker.entrySet()) {
-//
-//        }
-//    }
-//
-//    private void evaluateRules(List<AlertRule> alertRules, BigDecimal currentPrice){
-//    }
-//
-//    private boolean shouldTrigger(AlertRule alertRule, BigDecimal currentPrice){
-//        return true;
-//    }
-//
-//    private void triggerAlert(AlertRule alertRule, BigDecimal currentPrice){}
 
 }

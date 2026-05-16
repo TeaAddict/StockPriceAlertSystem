@@ -9,7 +9,7 @@ public class MarketDataService {
 
     public BigDecimal getCurrentPrice(String ticker){
         return switch (ticker){
-            case "AAPL" -> BigDecimal.valueOf(111);
+            case "AAPL" -> BigDecimal.valueOf(501);
             case "TSLA" -> BigDecimal.valueOf(122);
             default -> BigDecimal.valueOf(100);
         };

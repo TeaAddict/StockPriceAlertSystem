@@ -5,7 +5,6 @@ CREATE TABLE alert_rule (
     price_condition VARCHAR(50) NOT NULL,
     target_price DECIMAL(19, 4) NOT NULL,
     status VARCHAR(50) NOT NULL,
-    triggered_at TIMESTAMPTZ NULL,
     user_id BIGINT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,

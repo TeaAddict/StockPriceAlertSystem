@@ -2,6 +2,7 @@ package ooo.stock.StockPriceAlertSystem.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import ooo.stock.StockPriceAlertSystem.dto.UserMapper;
 import ooo.stock.StockPriceAlertSystem.dto.UserRequest;
 import ooo.stock.StockPriceAlertSystem.dto.UserResponse;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api/users")
 @RestController
 public class UserController {

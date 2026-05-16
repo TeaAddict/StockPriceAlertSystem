@@ -31,11 +31,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // TODO - remove h2 later
 //                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/alerts").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/alerts/*").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/alerts").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/alerts/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/alerts/*").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/alert-rules").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/alert-rules/*").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/alert-rules").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/alert-rules/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/alert-rules/*").hasAnyRole("ADMIN")
 
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()

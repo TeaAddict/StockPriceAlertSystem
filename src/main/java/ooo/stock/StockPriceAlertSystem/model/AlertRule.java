@@ -38,8 +38,6 @@ public class AlertRule extends Auditable{
     @Column(nullable = false)
     private Status status;
 
-    private LocalDateTime triggeredAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;

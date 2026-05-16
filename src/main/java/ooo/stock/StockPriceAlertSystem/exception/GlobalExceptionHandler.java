@@ -84,7 +84,7 @@ public class GlobalExceptionHandler {
         }
 
         ErrorResponse error = new ErrorResponse(
-                HttpStatus.FORBIDDEN.value(),
+                HttpStatus.BAD_REQUEST.value(),
                 "Invalid format exception",
                 "Invalid value, expected - " + allowedValues,
                 LocalDateTime.now()

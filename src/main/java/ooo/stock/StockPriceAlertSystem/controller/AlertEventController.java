@@ -1,6 +1,7 @@
 package ooo.stock.StockPriceAlertSystem.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import ooo.stock.StockPriceAlertSystem.dto.AlertEventMapper;
 import ooo.stock.StockPriceAlertSystem.dto.AlertEventResponse;
 import ooo.stock.StockPriceAlertSystem.service.AlertEventService;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class AlertEventController {
