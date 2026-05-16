@@ -2,7 +2,8 @@
 Run docker container based on docker-compose.yml -
 docker compose up -d
 
-
+// pgAdmin
+http://localhost:5050
 
 
 

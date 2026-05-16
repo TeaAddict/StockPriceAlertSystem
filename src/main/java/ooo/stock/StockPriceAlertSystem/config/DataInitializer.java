@@ -19,13 +19,13 @@ public class DataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args){
-        if (userRepository.existsByEmail("admin@example.com")) {
+        if (userRepository.existsByEmail("admin@admin.com")) {
             return;
         }
 
         User admin = new User();
         admin.setUsername("admin");
-        admin.setEmail("admin@example.com");
+        admin.setEmail("admin@admin.com");
         admin.setPassword(passwordEncoder.encode("admin"));
         admin.setRole(Role.ADMIN);
         admin.setCreatedBy("SYS");
