@@ -37,7 +37,7 @@ public class AlertEngineService {
         }
     }
 
-    public void evaluateRules(BigDecimal currentPrice, List<AlertRule> alertRules){
+    private void evaluateRules(BigDecimal currentPrice, List<AlertRule> alertRules){
         for (AlertRule alertRule : alertRules){
             if (shouldTrigger(currentPrice, alertRule)){
                 triggerAlert(currentPrice, alertRule);
@@ -45,14 +45,14 @@ public class AlertEngineService {
         }
     }
 
-    public boolean shouldTrigger(BigDecimal currentPrice, AlertRule alertRule){
+    private boolean shouldTrigger(BigDecimal currentPrice, AlertRule alertRule){
         return switch (alertRule.getPriceCondition()){
             case GREATER_THAN -> currentPrice.compareTo(alertRule.getTargetPrice()) > 0;
             case LESS_THAN -> currentPrice.compareTo(alertRule.getTargetPrice()) < 0;
         };
     }
 
-    public void triggerAlert(BigDecimal currentPrice, AlertRule alertRule){
+    private void triggerAlert(BigDecimal currentPrice, AlertRule alertRule){
         log.info("Alert triggered at price: {},\tTicker: {},\tRule id: {}", currentPrice, alertRule.getTicker(), alertRule.getId());
 
         alertRule.setStatus(Status.TRIGGERED);
@@ -64,8 +64,4 @@ public class AlertEngineService {
         alertEvent.setCreatedBy("system");
         alertEventRepository.save(alertEvent);
     }
-
-
-
-
 }
