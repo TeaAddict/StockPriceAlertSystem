@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import ooo.stock.StockPriceAlertSystem.service.AlertEngineService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RestController;
 
 
 @Component
@@ -15,7 +14,7 @@ public class AlertScheduler {
 
     private final AlertEngineService alertEngineService;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 2000)
     public void runAlertCheck(){
         log.info("Running scheduled alert check");
 

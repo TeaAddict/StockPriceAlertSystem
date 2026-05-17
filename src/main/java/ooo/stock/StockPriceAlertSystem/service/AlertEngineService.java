@@ -36,11 +36,11 @@ public class AlertEngineService {
         Map<String, List<AlertRule>> groupedAlertRules = activeAlertRules.stream().collect(Collectors.groupingBy(AlertRule::getTicker));
 
         for (Map.Entry<String, List<AlertRule>> entry : groupedAlertRules.entrySet()){
-            if (useFakeData){
-                evaluateRules(marketDataService.getCurrentPriceFake(entry.getKey()), entry.getValue());
-            } else {
-                evaluateRules(marketDataService.getCurrentPrice(entry.getKey()), entry.getValue());
-            }
+            log.info("Getting price for {}", entry.getKey());
+            BigDecimal price = useFakeData
+                    ? marketDataService.getCurrentPriceFake(entry.getKey())
+                    : marketDataService.getCurrentPrice(entry.getKey());
+            evaluateRules(price, entry.getValue());
         }
     }
 
@@ -60,7 +60,7 @@ public class AlertEngineService {
     }
 
     private void triggerAlert(BigDecimal currentPrice, AlertRule alertRule){
-        log.info("Alert triggered at price: {},\tTicker: {},\tRule id: {}", currentPrice, alertRule.getTicker(), alertRule.getId());
+        log.info("!!!!!!!!! Alert triggered at price: {},\tTicker: {},\tRule id: {}", currentPrice, alertRule.getTicker(), alertRule.getId());
 
         alertRule.setStatus(Status.TRIGGERED);
 
