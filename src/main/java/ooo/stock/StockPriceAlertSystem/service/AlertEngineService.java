@@ -8,13 +8,14 @@ import ooo.stock.StockPriceAlertSystem.model.AlertRule;
 import ooo.stock.StockPriceAlertSystem.model.Status;
 import ooo.stock.StockPriceAlertSystem.repository.AlertEventRepository;
 import ooo.stock.StockPriceAlertSystem.repository.AlertRuleRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -26,22 +27,25 @@ public class AlertEngineService {
     private final AlertEventRepository alertEventRepository;
     private final MarketDataService marketDataService;
 
-    @Value("${market.use-fake-data}")
-    private boolean useFakeData;
-
     @Transactional
     public void processAlerts(){
         List<AlertRule> activeAlertRules = alertRuleRepository.findByStatus(Status.ACTIVE);
 
         Map<String, List<AlertRule>> groupedAlertRules = activeAlertRules.stream().collect(Collectors.groupingBy(AlertRule::getTicker));
 
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+
+        log.info("Getting prices >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         for (Map.Entry<String, List<AlertRule>> entry : groupedAlertRules.entrySet()){
             log.info("Getting price for {}", entry.getKey());
-            BigDecimal price = useFakeData
-                    ? marketDataService.getCurrentPriceFake(entry.getKey())
-                    : marketDataService.getCurrentPrice(entry.getKey());
-            evaluateRules(price, entry.getValue());
+            CompletableFuture<Void> future = marketDataService.getCurrentPriceAsync(entry.getKey())
+                    .thenAccept(price -> evaluateRules(price, entry.getValue()));
+            futures.add(future);
         }
+
+        CompletableFuture.allOf(
+                futures.toArray(new CompletableFuture[0])
+        ).join();
     }
 
     private void evaluateRules(BigDecimal currentPrice, List<AlertRule> alertRules){
